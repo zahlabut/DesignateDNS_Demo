@@ -1,4 +1,4 @@
-import subprocess, sys, time, re
+import subprocess, sys, time, re, os, art
 
 
 import random
@@ -8,7 +8,8 @@ def rand():
 
 def exec_command(command):
     try:
-        print_in_color('\n--> ' + command+ '\n', 'blue')
+        os.system('clear')
+        print_in_color('\n' + command+ '\n', 'blue')
         result = subprocess.check_output(command, stdin=True, stderr=subprocess.STDOUT, shell=True,encoding='UTF-8')
         print_in_color(result, 'green')
 
@@ -26,6 +27,16 @@ def exec_command(command):
         else:
             sys.exit(1)
         return {'ReturnCode': e.returncode, 'CommandOutput': e.output}
+
+
+def exec_command_silence(command):
+    print_in_color(command, 'blue')
+    try:
+        result = subprocess.check_output(command, stdin=True, stderr=subprocess.STDOUT, shell=True,encoding='UTF-8')
+        return {'ReturnCode': 0, 'CommandOutput': result}
+    except:
+        pass
+
 
 def print_in_color(string,color_or_format=None):
     string=str(string)

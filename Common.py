@@ -1,4 +1,4 @@
-import subprocess, sys, time, re, os, art
+import subprocess, sys, time, re, os
 
 
 import random

@@ -2,6 +2,7 @@
 # You need to be sourced (admintrc, openrc ...) to run this script
 
 from Common import *
+from art import *
 
 random_string = rand()
 
@@ -84,7 +85,7 @@ designate_demo_commands=[
     'openstack server delete vm{}'.format(random_string),
     'dig @{} vm{}.example{}.com. A'.format(local_resolver_ip, random_string, random_string),
     'dig @{} vm{}.example{}.com. A +short'.format(local_resolver_ip, random_string, random_string),
-    'ping -c 4 vm{}.example{}.com'.format(random_string, random_string)
+    'ping -c 1 vm{}.example{}.com'.format(random_string, random_string)
 ]
 for com in designate_demo_commands:
     exec_command(com)

@@ -46,8 +46,8 @@ create_fip_for_vm_port_commands=[
 ]
 
 
-# for com in sec_gr_commands:
-#     exec_command(com)
+for com in sec_gr_commands:
+    exec_command(com)
 
 for com in net_commands:
     exec_command(com)

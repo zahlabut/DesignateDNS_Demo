@@ -10,10 +10,10 @@ sec_gr_commands = [
 "openstack security group list --project=admin",
 "openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol icmp --ingress",
 "openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol icmp --egress",
-"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 22 --ingress",
-"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 22 --egress",
-"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 80 --ingress",
-"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 80 --egress",
+#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 22 --ingress",
+#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 22 --egress",
+#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 80 --ingress",
+#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 80 --egress",
 'clear']
 
 net_commands=[
@@ -60,8 +60,6 @@ for com in create_router_commands:
 for com in create_vm_commands:
     if 'server create' in com:
         exec_command(com, delay=5)
-    else:
-        exec_command(com)
 
 for com in create_fip_for_vm_port_commands:
     exec_command(com)
@@ -94,7 +92,5 @@ designate_demo_commands=[
 for com in designate_demo_commands:
     if 'server delete' in com:
         exec_command(com, delay=3)
-    else:
-        exec_command(com)
 
 tprint("It's Over!!!")

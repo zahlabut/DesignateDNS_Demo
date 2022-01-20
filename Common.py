@@ -8,10 +8,20 @@ def rand():
 
 def exec_command(command, delay=0):
     try:
-        os.system('clear')
+        #os.system('clear')
         print_in_color('\n' + command+ '\n', 'blue')
         result = subprocess.check_output(command, stdin=True, stderr=subprocess.STDOUT, shell=True,encoding='UTF-8')
-        print_in_color(result, 'green')
+
+        clear_result = ''
+        filter_out = ['warnings.warn', "is an invalid version and will not be supported in a future release"]
+        for line in result.splitlines():
+            if filter_out[0] in line or filter_out[1] in line:
+                pass
+            else:
+                clear_result+=line+'\n'
+
+
+        print_in_color(clear_result, 'green')
         time.sleep(delay)
         cont=choose_option_from_list(['yes','no'], 'To continue?')[1]
         if cont=='yes':

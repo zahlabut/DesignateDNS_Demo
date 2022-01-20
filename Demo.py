@@ -43,8 +43,10 @@ create_fip_for_vm_port_commands=[
     "openstack floating ip create public --port $(openstack port list --server vm{}".format(random_string)+" | grep ip_address | awk '{print $2}') -c name"
 ]
 
-for com in sec_gr_commands:
-    exec_command_silence(com)
+cont = choose_option_from_list(['yes', 'no'], 'To continue?')[1]
+if cont == 'yes':
+    for com in sec_gr_commands:
+        exec_command_silence(com)
 
 for com in net_commands:
     exec_command(com)

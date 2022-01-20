@@ -29,7 +29,7 @@ def exec_command(command):
         return {'ReturnCode': e.returncode, 'CommandOutput': e.output}
 
 
-def exec_command_silence(command):
+def exec_command_silence(command, print_com = True):
     print_in_color(command, 'blue')
     try:
         result = subprocess.check_output(command, stdin=True, stderr=subprocess.STDOUT, shell=True,encoding='UTF-8')

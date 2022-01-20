@@ -1,4 +1,4 @@
-import subprocess, sys, time, re, os
+import subprocess, sys, re
 
 
 import random
@@ -6,13 +6,11 @@ import random
 def rand():
     return str(random.randint(1,1000))
 
-def exec_command(command, delay=0):
+def exec_command(command):
     try:
         #os.system('clear')
         print_in_color('\n' + command+ '\n', 'blue')
         result = subprocess.check_output(command, stdin=True, stderr=subprocess.STDOUT, shell=True,encoding='UTF-8')
-
-        #result = subprocess.check_output('{} 2>&1 | tee {}'.format(command, 'out.log'), shell=True, universal_newlines=True)
         clear_result = ''
         for line in result.splitlines():
             if line.startswith('/') or line.startswith(' '):
@@ -20,17 +18,16 @@ def exec_command(command, delay=0):
             else:
                 clear_result+=line+'\n'
         print_in_color(clear_result, 'green')
-        time.sleep(delay)
-        cont=choose_option_from_list(['yes','no'], 'To continue?')[1]
-        if cont=='yes':
+        cont=to_continue()
+        if cont=='y':
             pass
         else:
             sys.exit(1)
         return {'ReturnCode': 0, 'CommandOutput': result}
     except subprocess.CalledProcessError as e:
         print_in_color(e, 'red')
-        cont=choose_option_from_list(['yes','no'], 'To continue?')[1]
-        if cont=='yes':
+        cont=to_continue()
+        if cont=='y':
             pass
         else:
             sys.exit(1)
@@ -71,31 +68,12 @@ def print_in_color(string,color_or_format=None):
     else:
         print(string)
 
-def choose_option_from_list(list_object, msg):
-    print('')
-    try:
-        if (len(list_object)==0):
-            print("Nothing to choose :( ")
-            print("Execution will stop!")
-            time.sleep(5)
-            exit("Connot continue execution!!!")
-            sys.exit(1)
-        print(msg)
-        counter=1
-        for item in list_object:
-            print(str(counter)+') - '+item)
-            counter=counter+1
-        choosed_option=input("Choose your option:")
-        if choosed_option=='Demo':
-            return [True, 'Demo']
-        while (int(choosed_option)<0 or int(choosed_option)> len(list_object)):
-            print("No such option - ", choosed_option)
-            choosed_option=input("Choose your option:")
-        print_in_color("Option is: '"+list_object[int(choosed_option)-1]+"'"+'\n','bold')
-        return [True,list_object[int(choosed_option)-1]]
-    except Exception as e:
-        print('*** No such option!!!***', e)
-        return[False, str(e)]
+
+def to_continue(msg='To continue y/n? '):
+    result = None
+    while result not in ['y', 'n']:
+        result = input(msg)
+    return result
 
 
 def get_ips_from_file(fil='/etc/bind/named.conf.options'):
@@ -110,5 +88,3 @@ def get_ips_from_file(fil='/etc/bind/named.conf.options'):
                 if ip not in ip_list:
                     ip_list.append(ip)
     return ip_list
-
-

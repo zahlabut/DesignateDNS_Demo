@@ -1,20 +1,18 @@
 # Usage
 # You need to be sourced (admintrc, openrc ...) to run this script
 
+import time
 from Common import *
 from art import *
 
+sleep_time=3
 random_string = rand()
 
 sec_gr_commands = [
 "openstack security group list --project=admin",
 "openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol icmp --ingress",
 "openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol icmp --egress",
-#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 22 --ingress",
-#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 22 --egress",
-#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 80 --ingress",
-#"openstack security group rule create $(openstack security group list --project=admin | grep default | awk '{print $2}') --protocol tcp --dst-port 80 --egress",
-'clear']
+]
 
 net_commands=[
     'openstack network create net{} -c name'.format(random_string),
@@ -35,6 +33,7 @@ create_router_commands = [
 
 create_vm_commands=[
     'openstack server create --flavor m1.micro --image cirros-0.5.1-x86_64-disk --nic net-id=net{} vm{}'.format(random_string,random_string),
+    'sleep',
     'openstack server show vm{}'.format(random_string)
 ]
 
@@ -43,8 +42,8 @@ create_fip_for_vm_port_commands=[
     "openstack floating ip create public --port $(openstack port list --server vm{}".format(random_string)+" | grep ip_address | awk '{print $2}') -c name"
 ]
 
-cont = choose_option_from_list(['yes', 'no'], 'To Run Security Group create commands?')[1]
-if cont == 'yes':
+cont = to_continue('To run the Security Grup create CLIs y/n? ')
+if cont == 'y':
     for com in sec_gr_commands:
         exec_command_silence(com)
 
@@ -58,8 +57,10 @@ for com in create_router_commands:
     exec_command(com)
 
 for com in create_vm_commands:
-    if 'server create' in com:
-        exec_command(com, delay=5)
+    if com == 'sleep':
+        time.sleep(sleep_time)
+    else:
+        exec_command(com)
 
 for com in create_fip_for_vm_port_commands:
     exec_command(com)
@@ -86,11 +87,14 @@ designate_demo_commands=[
     'dig @{} vm{}.example{}.com. A +short'.format(local_resolver_ip, random_string,random_string),
     'ping -c 4 vm{}.example{}.com'.format(random_string, random_string),
     'openstack server delete vm{}'.format(random_string),
+    'sleep',
     'dig @{} vm{}.example{}.com. A +short'.format(local_resolver_ip, random_string, random_string),
-    'ping -c 1 vm{}.example{}.com'.format(random_string, random_string)
+    'ping -c 1 -W 1 vm{}.example{}.com'.format(random_string, random_string)
 ]
 for com in designate_demo_commands:
-    if 'server delete' in com:
-        exec_command(com, delay=3)
+    if com == 'sleep':
+        time.sleep(sleep_time)
+    else:
+        exec_command(com)
 
 tprint("It's Over!!!")

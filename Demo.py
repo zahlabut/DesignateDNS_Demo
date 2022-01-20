@@ -22,7 +22,7 @@ net_commands=[
 
 zone_to_net_commands=[
     'openstack zone create example{}.com. --email example{}@example.com'.format(random_string, random_string),
-    'openstack zone list --all',
+    'openstack zone show example{}@example.com'.format(random_string),
     'openstack network set --dns-domain example{}.com. net{}'.format(random_string, random_string),
     'openstack network show net{} -c dns_domain'.format(random_string)
 ]
@@ -58,7 +58,10 @@ for com in create_router_commands:
     exec_command(com)
 
 for com in create_vm_commands:
-    exec_command(com)
+    if 'server create' in com:
+        exec_command(com, delay=5)
+    else:
+        exec_command(com)
 
 for com in create_fip_for_vm_port_commands:
     exec_command(com)
@@ -89,6 +92,9 @@ designate_demo_commands=[
     'ping -c 1 vm{}.example{}.com'.format(random_string, random_string)
 ]
 for com in designate_demo_commands:
-    exec_command(com)
+    if 'server delete' in com:
+        exec_command(com, delay=3)
+    else:
+        exec_command(com)
 
 tprint("It's Over!!!")

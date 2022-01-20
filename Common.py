@@ -6,13 +6,13 @@ import random
 def rand():
     return str(random.randint(1,1000))
 
-def exec_command(command):
+def exec_command(command, delay=0):
     try:
         os.system('clear')
         print_in_color('\n' + command+ '\n', 'blue')
         result = subprocess.check_output(command, stdin=True, stderr=subprocess.STDOUT, shell=True,encoding='UTF-8')
         print_in_color(result, 'green')
-
+        time.sleep(delay)
         cont=choose_option_from_list(['yes','no'], 'To continue?')[1]
         if cont=='yes':
             pass

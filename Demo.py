@@ -91,4 +91,3 @@ for com in designate_demo_commands:
     exec_command(com)
 
 tprint("It's Over!!!")
-tprint("It's Over!!!")

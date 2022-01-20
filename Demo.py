@@ -22,7 +22,7 @@ net_commands=[
 
 zone_to_net_commands=[
     'openstack zone create example{}.com. --email example{}@example.com'.format(random_string, random_string),
-    'openstack zone show example{}@example.com'.format(random_string),
+    'openstack zone show example{}.com'.format(random_string),
     'openstack network set --dns-domain example{}.com. net{}'.format(random_string, random_string),
     'openstack network show net{} -c dns_domain'.format(random_string)
 ]

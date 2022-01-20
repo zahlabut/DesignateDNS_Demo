@@ -43,7 +43,7 @@ create_fip_for_vm_port_commands=[
     "openstack floating ip create public --port $(openstack port list --server vm{}".format(random_string)+" | grep ip_address | awk '{print $2}') -c name"
 ]
 
-cont = choose_option_from_list(['yes', 'no'], 'To continue?')[1]
+cont = choose_option_from_list(['yes', 'no'], 'To Run Security Group create commands?')[1]
 if cont == 'yes':
     for com in sec_gr_commands:
         exec_command_silence(com)
@@ -85,7 +85,6 @@ designate_demo_commands=[
     'dig @{} vm{}.example{}.com. A +short'.format(local_resolver_ip, random_string,random_string),
     'ping -c 4 vm{}.example{}.com'.format(random_string, random_string),
     'openstack server delete vm{}'.format(random_string),
-    'dig @{} vm{}.example{}.com. A'.format(local_resolver_ip, random_string, random_string),
     'dig @{} vm{}.example{}.com. A +short'.format(local_resolver_ip, random_string, random_string),
     'ping -c 1 vm{}.example{}.com'.format(random_string, random_string)
 ]

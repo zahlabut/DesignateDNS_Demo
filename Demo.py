@@ -42,7 +42,7 @@ create_fip_for_vm_port_commands=[
     "openstack floating ip create public --port $(openstack port list --server vm{}".format(random_string)+" | grep ip_address | awk '{print $2}') -c name"
 ]
 
-if to_continue('Are you sourced with *.rc file?') == 'n':
+if to_continue('Are you sourced with *.rc file y/n?') == 'n':
     sys.exit(1)
 
 cont = to_continue('To run the Security Grup create CLIs y/n? ')

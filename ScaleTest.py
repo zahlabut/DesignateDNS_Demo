@@ -5,6 +5,14 @@ import ipaddress, threading
 print_in_color('You must be sourced with *.rc file, for example overcloudrc', 'green')
 IPs = [str(ip) for ip in ipaddress.IPv4Network('192.0.0.0/12')]
 
+# Parameters #
+threads_number = 100  # Number of threads
+zones = 100           # Number of zones to be created in each thread
+recordsets = 10       # Number of recordsets to be created within a zone
+start_index = 0       # Start index (For example if zero all the stuff
+                      # will be started from example0.com)
+
+
 @dataclass
 class TestScale:
     number_of_zones: int
@@ -54,8 +62,8 @@ class TestScale:
 
 if __name__ == "__main__":
     # Increase quota
-    zones = 10*1000*1000
-    zone_recordsets = 100
+    zones = 100000
+    zone_recordsets = 100000
     command = 'openstack dns quota set --zone-recordsets {} --zones {}'.format(zone_recordsets, zones)
     TestScale.exec_command(command)
 
@@ -63,13 +71,7 @@ if __name__ == "__main__":
     # obj = TestScale(number_of_zones=10, number_of_recordsets=3, start_index=40)
     # obj.create_zones_with_recordsets()
 
-    # Start threads
-    threads_number = 10
-    zones=100
-    recordsets=10
-    start_index=0
-
-    start_indexes = [x for x in range(0, threads_number * threads_number, threads_number)]
+    start_indexes = range(start_index, start_index + threads_number * threads_number, threads_number)
     threads=[]
     for index in start_indexes:
         threads.append(TestScale(number_of_zones=zones, number_of_recordsets=recordsets, start_index=index))
@@ -78,3 +80,4 @@ if __name__ == "__main__":
     for t in threads:
         thread = threading.Thread(target=t.create_zones_with_recordsets)
         thread.start()
+        #thread.join()
